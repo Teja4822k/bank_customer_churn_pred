@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Prediction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #76c1d4; /* Light Blue Backdrop */
+            color: #3d7c47; /* Green Mountain */
+        }
+
+        #nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .navbar {
+            background: #09868b !important; /* Blue Mountain */
+        }
+
+        .navbar-nav li a {
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .navbar-brand {
+            color: #3d7c47 !important; /* Green Mountain */
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 5% auto;
+            background: #f7f7f7; /* Barely Gray Edge */
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #09868b; /* Blue Mountain */
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #000000; /* Green Mountain */
+        }
+
+        .btn-predict {
+            background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(49, 196, 190, 0.75);
+        }
+
+        .alert {
+            margin-top: 20px;
+        }
+
+        footer {
+            background-color: #e9edf4;
+            color: #666;
+            padding: 10px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: #666;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Starts -->
+    <section id="nav-bar">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand font-weight-bold" href="#">BANK</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Net Banking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Predictions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </section>
+    <!-- Navbar Ends -->
+
+    <!-- Form Starts -->
+    <div class="form-container">
+        <h1>Enter Customer Information</h1>
+        <form action="{{ url_for('predict')}}" method="post">
+            <div class="form-group">
+                <label for="CreditScore">Credit Score</label>
+                <input type="number" class="form-control" id="CreditScore" name="CreditScore" required>
+            </div>
+            <div class="form-group">
+                <label for="Age">Age</label>
+                <input type="number" class="form-control" id="Age" name="Age" required>
+            </div>
+            <div class="form-group">
+                <label for="Tenure">Tenure</label>
+                <input type="number" class="form-control" id="Tenure" name="Tenure" required>
+            </div>
+            <div class="form-group">
+                <label for="Balance">Account Balance</label>
+                <input type="number" class="form-control" id="Balance" name="Balance" required>
+            </div>
+            <div class="form-group">
+                <label for="NumOfProducts">Number of Products</label>
+                <input type="number" class="form-control" id="NumOfProducts" name="NumOfProducts" required>
+            </div>
+            <div class="form-group">
+                <label for="HasCrCard">Credit Card (1=Yes, 0=No)</label>
+                <input type="number" class="form-control" id="HasCrCard" name="HasCrCard" required>
+            </div>
+            <div class="form-group">
+                <label for="IsActiveMember">Active Member (1=Yes, 0=No)</label>
+                <input type="number" class="form-control" id="IsActiveMember" name="IsActiveMember" required>
+            </div>
+            <div class="form-group">
+                <label for="EstimatedSalary">Estimated Salary</label>
+                <input type="number" class="form-control" id="EstimatedSalary" name="EstimatedSalary" required>
+            </div>
+            <div class="form-group">
+                <label for="Geography">Location</label>
+                <select class="form-control" id="Geography" name="Geography_Germany" required>
+                    <option value="Germany">Germany</option>
+                    <option value="Spain">Spain</option>
+                    <option value="France">France</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Gender">Gender</label>
+                <select class="form-control" id="Gender" name="Gender_Male" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-predict">Predict Churn</button>
+        </form>
+        <h3 class="alert alert-primary text-center" role="alert">{{ prediction_text }}</h3>
+    </div>
+    <!-- Form Ends -->
+
+    <!-- Footer -->
+    <footer>
+        <p>Developed by Aniket Bhagyash Tejas</p>
+        <a href="#"><i class="fa fa-github fa-2x" aria-hidden="true"></i></a>
+        <a href="#"><i class="fa fa-linkedin fa-2x" aria-hidden="true"></i></a>
+    </footer>
+    <!-- Footer Ends -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+
+</html>
