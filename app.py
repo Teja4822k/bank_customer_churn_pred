@@ -7,7 +7,7 @@ import sklearn
 import matplotlib
 from sklearn.preprocessing import StandardScaler
 app = Flask(__name__)
-model = pickle.load(open('Customer_Churn-Deployment-master\Churn_Prediction.pkl', 'rb'))
+model = pickle.load(open('Churn_Prediction.pkl', 'rb'))
 @app.route('/', methods=['GET'])
 def Home():
     return render_template('index.html')
